@@ -1,9 +1,13 @@
-function greeting() {
+async function greeting() {
   //D
   const div = document.getElementById("main");
-  console.log("dans gretting");
-
-  if (div) {
-    div.innerHTML = "GROSSE MERDE";
-  }
+  fetch("localhost:3333", {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      if (div) {
+        div.innerHTML = res;
+      }
+    });
 }
