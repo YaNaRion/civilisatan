@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && http-server ./src/"
+    "start": "tsc && http-server ./site/src/"
   },
   "author": "YaNaRion",
   "license": "ISC",

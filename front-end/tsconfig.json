@@ -28,11 +28,11 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
-    "outDir": "dist",
-    "rootDir": "src"
+    "outDir": "site/dist",
+    "rootDir": "site/src"
   },
   "include": [
-    "src/**/*"
+    "site/src/**/*"
   ],
   "exclude": [
     "node_modules"
