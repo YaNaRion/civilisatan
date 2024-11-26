@@ -1,8 +1,7 @@
 Front-end
     - HTML/CSS
-        - Voir s'il y a des variantes qui pourraient mieux
     - Typescript
-    - Aucun framework
+    - Aucun framework, car on veut apprendre quelques choses
 
 Back-end
     - Go
@@ -20,3 +19,4 @@ BD
             - Apprendre à mieux utiliser une base de donnée relationnelle
         - Désaventage
             - Demande plus de temps que Mongo
+
