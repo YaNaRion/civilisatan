@@ -1,9 +1,6 @@
 #FRONT-END
-front-end/node_modules
-front-end/package-lock.json
+./site/node_modules
+./site/package-lock.json
 
 #BACK-END
-
-#REPO
-package-lock.json
-
+./server/main
