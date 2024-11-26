@@ -1,0 +1,19 @@
+{
+  "name": "Cavilisation-front-end",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+        "start": "tsc && http-server ./site/ -a localhost -p 3000 -c-1 -o ."
+  },
+  "author": "YaNaRion",
+  "license": "ISC",
+  "files": ["dist", "src"],
+  "description": "",
+  "dependencies": {
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "ts-node": "^10.9.2"
+  }
+}
