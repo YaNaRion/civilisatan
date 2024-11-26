@@ -1,2 +1,9 @@
+#FRONT-END
 front-end/node_modules
-front-end/packages_lock.json
+front-end/package-lock.json
+
+#BACK-END
+
+#REPO
+package-lock.json
+
