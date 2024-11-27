@@ -1,5 +1,5 @@
 #FRONT-END
-./site/node_modules
+./site/node_modules/
 ./site/package-lock.json
 
 #BACK-END
