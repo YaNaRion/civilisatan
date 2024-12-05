@@ -1,8 +1,13 @@
-async function greeting() {
-  //D
-  const div = document.getElementById("main");
-  if (div) {
-    div.innerHTML = "Hot save x2";
-    console.log("lol x3");
-  }
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("credential-form") as HTMLFormElement;
+  form.addEventListener("submit", (event: Event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const credentials = {
+      username: formData.get("username") as string,
+      password: formData.get("password") as string,
+    };
+    console.log(credentials);
+    globalThis.location.href = "./src/admin/admin.html";
+  });
+});
