@@ -1,28 +1,15 @@
 "use strict";
-// async function greeting() {
-//   //D
-//   const div = document.getElementById("main");
-//   if (div) {
-//     div.innerHTML = "Hot save x2";
-//     console.log("lol x3");
-//   }
-// }
-// function checkCredential(form: Event) {
-//   alert(form);
-//   // if (form.username.value === "yann" && form.password.value === "123")
-//   // globalThis.location.href = "./admin/admin.html";
-// }
+Object.defineProperty(exports, "__esModule", { value: true });
 document.addEventListener("DOMContentLoaded", function () {
-    var form = document.getElementById("credential-form");
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        var formData = new FormData(form);
-        var credentials = {
-            username: formData.get("username"),
-            password: formData.get("password"),
-        };
-        console.log(credentials);
-        globalThis.location.href = "./src/admin/admin.html";
-        // Implement your logic here to submit the form data securely
-    });
+  var loginForm = document.getElementById("login-form");
+  loginForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    alert("test");
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    // Handle the form submission here.
+    // For example, send a request to your server to authenticate the user.
+    console.log("Username: ".concat(username));
+    console.log("Password: ".concat(password));
+  });
 });

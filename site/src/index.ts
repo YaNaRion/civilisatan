@@ -1,13 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("credential-form") as HTMLFormElement;
-  form.addEventListener("submit", (event: Event) => {
+  const loginForm = document.getElementById("login-form") as HTMLFormElement;
+
+  loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const formData = new FormData(form);
-    const credentials = {
-      username: formData.get("username") as string,
-      password: formData.get("password") as string,
-    };
-    console.log(credentials);
-    globalThis.location.href = "./src/admin/admin.html";
+    alert("test");
+
+    const username = (document.getElementById("username") as HTMLInputElement)
+      .value;
+    const password = (document.getElementById("password") as HTMLInputElement)
+      .value;
+
+    // Handle the form submission here.
+    // For example, send a request to your server to authenticate the user.
+
+    console.log(`Username: ${username}`);
+    console.log(`Password: ${password}`);
   });
 });

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-        "start": "tsc && http-server ./ -a localhost -p 3000 -c-1 -o ."
+        "start": "tsc --noEmit && http-server ./ -a localhost -p 3000 -c-1 -o .",
+        "build": "tsc --noEmit"
   },
   "author": "YaNaRion",
   "license": "ISC",
