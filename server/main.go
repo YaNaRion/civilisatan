@@ -1,34 +1,54 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"io"
+	"log"
+	"main/controller"
+	"main/gateway"
+	"main/infra"
+	"main/router"
+	"main/service/config"
 	"net/http"
-	"os"
 )
 
-func getRoot(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got / request\n")
-	io.WriteString(w, "This is my website!\n")
-}
-func getHello(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("got /hello request\n")
-	io.WriteString(w, "Hello, HTTP!\n")
+const (
+	httpPort = ":3000"
+)
+
+func Setup() *config.Server {
+	// log.Println("Setup DB connection")
+	var err error
+	var db *infra.DB
+	// for db == nil {
+	// 	db, _ = infra.Setup()
+	// 	time.Sleep(1 * time.Second)
+	// }
+
+	// Setup des routes de l'API
+	log.Println("Setup Http controller")
+	mux := http.NewServeMux()
+	control := controller.SetUpController(mux, db)
+
+	// Setup HTTP request
+	log.Println("Setup Web router")
+	router := router.Setup(mux)
+
+	// Setup SocketIO connection
+	log.Println("Setup SocketIO connection")
+	socket, err := gateway.Setup(router.Mux, db)
+	if err != nil {
+		log.Println(err)
+	}
+
+	configServer := config.NewConf(db, router, socket, control)
+	return config.NewServer(configServer)
 }
 
 func main() {
-	fmt.Print("HELLO FROM SERVER")
-
-	http.HandleFunc("/", getRoot)
-	http.HandleFunc("/hello", getHello)
-
-	err := http.ListenAndServe(":3333", nil)
-
-	if errors.Is(err, http.ErrServerClosed) {
-		fmt.Printf("server closed\n")
-	} else if err != nil {
-		fmt.Printf("error starting server: %s\n", err)
-		os.Exit(1)
+	// Setup DB connection
+	server := Setup()
+	log.Println("Listen on localhost:3000")
+	err := http.ListenAndServe(httpPort, server.Conf.Router.Mux)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

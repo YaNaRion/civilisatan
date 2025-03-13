@@ -1,0 +1,74 @@
+package main
+
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+	"math"
+)
+
+type GameSceen int
+
+const (
+	MENU GameSceen = iota
+	GAME
+)
+
+var stateName = map[GameSceen]string{
+	MENU: "Menu",
+	GAME: "Game",
+}
+
+func main() {
+	rl.InitWindow(800, 450, "CIVILISATAN")
+	defer rl.CloseWindow()
+	rl.SetTargetFPS(60)
+
+	sceen := MENU
+
+	// Center of the screen
+	centerX := int32(400)
+	centerY := int32(225)
+
+	// Radius of the hexagon
+	radius := float32(100)
+
+	// Number of sides (6 for a hexagon)
+	sides := int32(6)
+	vertices := make([]rl.Vector2, sides)
+	for i := int32(0); i < sides; i++ {
+		angle := 2 * math.Pi * float32(i) / float32(sides)
+		vertices[i].X = centerX + radius*float32(math.Cos(float64(angle)))
+		vertices[i].Y = centerY + radius*float32(math.Sin(float64(angle)))
+	}
+
+	for !rl.WindowShouldClose() {
+		rl.BeginDrawing()
+		rl.ClearBackground(rl.RayWhite)
+		switch sceen {
+		case MENU:
+			DrawMenuSceen()
+			if rl.IsKeyPressed(rl.KeyEnter) {
+				sceen = GAME
+			}
+		case GAME:
+			DrawGameSceen()
+			if rl.IsKeyPressed(rl.KeyEnter) {
+				sceen = MENU
+			}
+		}
+		rl.EndDrawing()
+	}
+}
+
+func DrawMenuSceen() {
+	rl.DrawText("Menu, Press ENTER to enter game", 190, 200, 20, rl.LightGray)
+}
+
+func DrawGameSceen() {
+	rl.DrawText(
+		"THIS IS THAT GAME WINDOW, Press ENTER go back to Menu window",
+		10,
+		200,
+		20,
+		rl.LightGray,
+	)
+}

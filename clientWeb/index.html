@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateau Hexagonal</title>
+<style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .board {
+            display: grid;
+            gap: 0px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+	    gap: 8px;
+        }
+        .hex {
+            width: 60px;
+            height: 69px;
+            background-color: #3498db;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-bottom: -14px; /* Réduit l'espace entre les rangées */
+        }
+        /* Ligne verticale entre les hexagones */
+        .hex::before {
+            width: 4px;
+            height: 30px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        /* Lignes diagonales */
+        .hex::after {
+            width: 36px;
+            height: 4px;
+            top: calc(50% + 10px);
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(60deg);
+        }
+        .hex span::after {
+            content: "";
+            position: absolute;
+            width: 36px;
+            height: 4px;
+            background-color: black;
+            top: calc(50% - 10px);
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-60deg);
+        }
+    </style>
+</head>
+<body>
+<span style="color:blue; font-size:135px;">&#x2B22;</span>
+		<span class="hex1" />
+    <div class="board">
+        <div class="row">
+            <div class="hex">1</div>
+            <div class="hex">2</div>
+            <div class="hex">3</div>
+        </div>
+        <div class="row">
+            <div class="hex">4</div>
+            <div class="hex">5</div>
+            <div class="hex">6</div>
+            <div class="hex">7</div>
+        </div>
+        <div class="row">
+            <div class="hex">8</div>
+            <div class="hex">9</div>
+            <div class="hex">10</div>
+            <div class="hex">11</div>
+            <div class="hex">12</div>
+        </div>
+        <div class="row">
+            <div class="hex">13</div>
+            <div class="hex">14</div>
+            <div class="hex">15</div>
+            <div class="hex">16</div>
+        </div>
+        <div class="row">
+            <div class="hex">17</div>
+            <div class="hex">18</div>
+            <div class="hex">19</div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,30 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.hex-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hex-row {
+    display: flex;
+}
+
+.hex-row.even {
+    margin-left: 50px; /* Décalage pour les rangées paires */
+}
+
+.hex {
+    width: 100px;
+    height: 115.47px; /* Hauteur d'un hexagone régulier */
+    background-color: #4CAF50;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    margin: 0 2px; /* Espacement entre les tuiles */
+}
