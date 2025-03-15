@@ -5,9 +5,15 @@ import (
 	"math"
 )
 
+type HexagoneSide struct {
+	StartingPoint rl.Vector2
+	EndingPoint   rl.Vector2
+}
+
 type HexagoneTile struct {
 	Center rl.Vector2
 	Color  rl.Color
+	Sides  []HexagoneSide
 }
 
 type HexaGrid struct {
@@ -47,21 +53,24 @@ func (g *HexaGrid) PopulateGrid() {
 	for i := range g.RowsLen {
 		g.Grid[i] = make([]HexagoneTile, g.ColomnsLen)
 		for j := range g.ColomnsLen {
+			var center rl.Vector2
 			if j%2 == 0 {
-				g.Grid[i][j] = HexagoneTile{
-					Center: rl.Vector2{
-						X: g.OriginPos.X + g.Width + (float32(i) * g.Width),
-						Y: g.OriginPos.Y + (g.Height / 2) + (float32(j) * g.Height * 3 / 4),
-					},
+				center = rl.Vector2{
+					X: g.OriginPos.X + g.Width + (float32(i) * g.Width),
+					Y: g.OriginPos.Y + (g.Height / 2) + (float32(j) * g.Height * 3 / 4),
 				}
 			} else {
-				g.Grid[i][j] = HexagoneTile{
-					Center: rl.Vector2{
-						X: g.OriginPos.X + (g.Width / 2) + (float32(i) * g.Width),
-						Y: g.OriginPos.Y + (g.Height / 2) + (float32(j) * g.Height * 3 / 4),
-					},
+				center = rl.Vector2{
+					X: g.OriginPos.X + (g.Width / 2) + (float32(i) * g.Width),
+					Y: g.OriginPos.Y + (g.Height / 2) + (float32(j) * g.Height * 3 / 4),
 				}
 			}
+			tile := HexagoneTile{
+				Color:  rl.DarkBlue,
+				Center: center,
+			}
+			tile.CreateSides(g.Width, g.Height)
+			g.Grid[i][j] = tile
 		}
 	}
 }
@@ -73,8 +82,56 @@ func (g *HexaGrid) DrawGrid() {
 				(i == 0 && j == 3) || (i == 0 && j == 4) || (i == 4 && j == 4) {
 				continue
 			}
+			for _, side := range tile.Sides {
+				if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+					rl.DrawLineEx(
+						side.StartingPoint,
+						side.EndingPoint,
+						8,
+						rl.Red,
+					)
+				}
+			}
 			rl.DrawPoly(tile.Center, g.sides, g.radius, 30.0, rl.DarkBlue)
 			rl.DrawPolyLines(tile.Center, g.sides, g.radius, 30.0, rl.Black)
+
+		}
+	}
+}
+
+func (h *HexagoneTile) CreateSides(width float32, height float32) {
+	var edge []rl.Vector2
+	edge = append(edge, rl.Vector2{
+		X: 0,
+		Y: -height / 2,
+	})
+	edge = append(edge, rl.Vector2{
+		X: width / 2,
+		Y: -height / 4,
+	})
+	edge = append(edge, rl.Vector2{
+		X: width / 2,
+		Y: height / 4,
+	})
+	edge = append(edge, rl.Vector2{
+		X: 0,
+		Y: height / 2,
+	})
+	edge = append(edge, rl.Vector2{
+		X: -width / 2,
+		Y: height / 4,
+	})
+	edge = append(edge, rl.Vector2{
+		X: -width / 2,
+		Y: -height / 4,
+	})
+	edge = append(edge, edge[0])
+
+	h.Sides = make([]HexagoneSide, 6)
+	for i := range h.Sides {
+		h.Sides[i] = HexagoneSide{
+			StartingPoint: rl.Vector2Add(h.Center, edge[i]),
+			EndingPoint:   rl.Vector2Add(h.Center, edge[i+1]),
 		}
 	}
 }

@@ -5,11 +5,11 @@ import (
 	"client/scene"
 	"client/window"
 
+	// gui "github.com/gen2brain/raylib-go/raygui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 func main() {
-
 	InitialiseWindow(window.SCREEN_WIDTH, window.SCREEN_HEIGHT, "CIVILISATAN", window.MAX_FPS)
 	defer rl.CloseWindow()
 
@@ -24,6 +24,7 @@ func main() {
 	camera := camera.NewCamera(cameraOffSet, sceneManager.GetGameGridCenter())
 
 	for !rl.WindowShouldClose() {
+
 		// Initialise la scène
 		InitialiseDrawing()
 
