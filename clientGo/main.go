@@ -14,17 +14,14 @@ func main() {
 	defer rl.CloseWindow()
 
 	// Création du SceneManger
-	scene := scene.NewSceneManager(&rl.Vector2{
-		X: float32(window.SCREEN_WIDTH / 2),
-		Y: float32(window.SCREEN_HEIGHT / 2),
-	})
+	sceneManager := scene.NewSceneManager()
 
 	// Règle la caméra pour qu'elle soit au centre, la caméra suit le centre du plateau
 	cameraOffSet := rl.Vector2{
 		X: float32(window.SCREEN_WIDTH / 2),
 		Y: float32(window.SCREEN_HEIGHT / 2),
 	}
-	camera := camera.NewCamera(cameraOffSet, scene.GetGameGridCenter())
+	camera := camera.NewCamera(cameraOffSet, sceneManager.GetGameGridCenter())
 
 	for !rl.WindowShouldClose() {
 		// Initialise la scène
@@ -32,7 +29,7 @@ func main() {
 
 		// Active la caméra 3D
 		rl.BeginMode2D(*camera.Cam)
-		scene.DrawScene()
+		sceneManager.DrawScene()
 
 		// Gère le zoom de la caméra
 		camera.HandlerZoom()

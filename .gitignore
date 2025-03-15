@@ -4,7 +4,7 @@
 
 
 #FRONT-END GO desktop
-*./tmp
+*./tmp/*
 
 #BACK-END
 ./server/main

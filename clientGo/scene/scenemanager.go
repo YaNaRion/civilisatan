@@ -10,7 +10,7 @@ type SceneManager struct {
 	gameScene  game.GameScene
 }
 
-func NewSceneManager(gameGridPos *rl.Vector2) *SceneManager {
+func NewSceneManager() *SceneManager {
 	return &SceneManager{
 		sceneState: GAME,
 		gameScene:  *game.NewGameScene(),
