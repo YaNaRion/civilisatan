@@ -1,60 +1,49 @@
 package main
 
 import (
-	"client/grid"
-	"log"
+	"client/camera"
+	"client/scene"
+	"client/window"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-type GameSceen int
-
-const (
-	MENU GameSceen = iota
-	GAME
-)
-
-var stateName = map[GameSceen]string{
-	MENU: "Menu",
-	GAME: "Game",
-}
-
 func main() {
-	screenWidth := int32(1920)
-	screenHeight := int32(1080)
-	rl.InitWindow(screenWidth, screenHeight, "CIVILISATAN")
-	defer rl.CloseWindow()
+
+	rl.InitWindow(window.SCREEN_WIDTH, window.SCREEN_HEIGHT, "CIVILISATAN")
 	rl.SetTargetFPS(60)
+	defer rl.CloseWindow()
 
-	sceen := MENU
-
-	gridStr := grid.SetupGrid(rl.Vector2{
-		X: float32(screenWidth) / 3,
-		Y: float32(screenHeight) / 3,
+	// Création du SceneManger
+	scene := scene.NewSceneManager(&rl.Vector2{
+		X: float32(window.SCREEN_WIDTH / 2),
+		Y: float32(window.SCREEN_HEIGHT / 2),
 	})
 
-	log.Println(gridStr)
+	// Règle la caméra pour qu'elle soit au centre, la caméra suit le centre du plateau
+	cameraOffSet := rl.Vector2{
+		X: float32(window.SCREEN_WIDTH / 2),
+		Y: float32(window.SCREEN_HEIGHT / 2),
+	}
+	camera := camera.NewCamera(cameraOffSet, scene.GetGameGridCenter())
 
 	for !rl.WindowShouldClose() {
-		rl.BeginDrawing()
-		rl.ClearBackground(rl.RayWhite)
-		switch sceen {
-		case MENU:
-			if rl.IsKeyPressed(rl.KeyEnter) {
-				sceen = GAME
-			}
-		case GAME:
-			gridStr.DrawGrid()
-			if rl.IsKeyPressed(rl.KeyEnter) {
-				sceen = MENU
-			}
-		}
+		// Initialise la scène
+		InitialiseDrawing()
+
+		// Active la caméra 3D
+		rl.BeginMode2D(*camera.Cam)
+		scene.DrawScene()
+
+		// Gère le zoom de la caméra
+		camera.HandlerZoom()
+
 		rl.EndDrawing()
 	}
 }
 
-func DrawMenuSceen() {
-	rl.DrawText("Menu, Press ENTER to enter game", 190, 200, 20, rl.LightGray)
+func InitialiseDrawing() {
+	rl.BeginDrawing()
 }
 
 func DrawGameSceen() {
