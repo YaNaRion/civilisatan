@@ -1,6 +1,10 @@
-#FRONT-END
+#FRONT-END WEB
 ./site/node_modules/
 ./site/package-lock.json
+
+
+#FRONT-END GO desktop
+*./tmp
 
 #BACK-END
 ./server/main

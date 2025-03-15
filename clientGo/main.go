@@ -10,8 +10,7 @@ import (
 
 func main() {
 
-	rl.InitWindow(window.SCREEN_WIDTH, window.SCREEN_HEIGHT, "CIVILISATAN")
-	rl.SetTargetFPS(60)
+	InitialiseWindow(window.SCREEN_WIDTH, window.SCREEN_HEIGHT, "CIVILISATAN", window.MAX_FPS)
 	defer rl.CloseWindow()
 
 	// Création du SceneManger
@@ -42,16 +41,11 @@ func main() {
 	}
 }
 
-func InitialiseDrawing() {
-	rl.BeginDrawing()
+func InitialiseWindow(screenWidth int32, screenHeight int32, windowName string, fps int32) {
+	rl.InitWindow(screenWidth, screenHeight, windowName)
+	rl.SetTargetFPS(fps)
 }
 
-func DrawGameSceen() {
-	rl.DrawText(
-		"THIS IS THAT GAME WINDOW, Press ENTER go back to Menu window",
-		10,
-		200,
-		20,
-		rl.LightGray,
-	)
+func InitialiseDrawing() {
+	rl.BeginDrawing()
 }

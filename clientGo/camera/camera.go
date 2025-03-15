@@ -17,7 +17,7 @@ func NewCamera(offset rl.Vector2, target rl.Vector2) *Camera {
 }
 
 func (c *Camera) HandlerZoom() {
-	c.Cam.Zoom += rl.GetMouseWheelMove() * 0.05
+	c.Cam.Zoom += rl.GetMouseWheelMove() * 0.10
 	if c.Cam.Zoom < 0.1 {
 		c.Cam.Zoom = 0.1
 	}
