@@ -83,7 +83,8 @@ func (g *HexaGrid) DrawGrid() {
 				continue
 			}
 			for _, side := range tile.Sides {
-				if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+				if rl.IsMouseButtonPressed(rl.MouseButtonLeft) ||
+					rl.Vector2Distancerl.GetMousePosition() {
 					rl.DrawLineEx(
 						side.StartingPoint,
 						side.EndingPoint,
