@@ -36,3 +36,7 @@ func (s *SceneManager) drawGame() {
 func (s *SceneManager) GetGameGridCenter() rl.Vector2 {
 	return s.gameScene.GetGridCenter()
 }
+
+func (s *SceneManager) HandlerInput() {
+	s.gameScene.HandlerInput()
+}
