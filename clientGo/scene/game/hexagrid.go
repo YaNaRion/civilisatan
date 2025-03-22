@@ -2,10 +2,8 @@ package game
 
 import (
 	"client/window"
-	"log"
-	"math"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"math"
 )
 
 type HexagoneSide struct {
@@ -13,7 +11,7 @@ type HexagoneSide struct {
 	EndingPoint   rl.Vector2
 	color         *rl.Color
 	IsRender      bool
-	// neighbor      []*HexagoneSide
+	Neighbor      []*HexagoneSide
 }
 
 type HexagoneTile struct {
@@ -87,12 +85,25 @@ func (g *HexaGrid) PopulateGrid() {
 		}
 	}
 	g.Grid[0][0] = nil
+	g.addNeighbor()
+}
+
+func (g *HexaGrid) addNeighbor() {
+	for _, route := range g.Routes {
+		for _, neighbor := range g.Routes {
+			if rl.Vector2Equals(route.StartingPoint, neighbor.StartingPoint) ||
+				rl.Vector2Equals(route.StartingPoint, neighbor.EndingPoint) ||
+				rl.Vector2Equals(route.EndingPoint, neighbor.StartingPoint) ||
+				rl.Vector2Equals(route.EndingPoint, neighbor.EndingPoint) {
+				route.Neighbor = append(route.Neighbor, neighbor)
+			}
+		}
+	}
 }
 
 func (g *HexaGrid) DrawRoute(activePlayerCol rl.Color) {
 	for _, side := range g.Routes {
 		thinkness := float32(5)
-		log.Println("DANS DRAW ROUTE")
 		if rl.CheckCollisionPointLine(
 			rl.GetMousePosition(),
 			side.StartingPoint,
@@ -128,43 +139,36 @@ func (g *HexaGrid) DrawGrid(activePlayerCol rl.Color) {
 
 func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile, i int, j int) {
 	var edge []rl.Vector2
-
 	// 0
 	edge = append(edge, rl.Vector2{
 		X: -width / 2,
 		Y: height / 4,
 	})
-
 	// 1
 	edge = append(edge, rl.Vector2{
 		X: -width / 2,
 		Y: -height / 4,
 	})
-
 	// 2
 	edge = append(edge, rl.Vector2{
 		X: 0,
 		Y: -height / 2,
 	})
-
 	// 3
 	edge = append(edge, rl.Vector2{
 		X: width / 2,
 		Y: -height / 4,
 	})
-
 	// 4
 	edge = append(edge, rl.Vector2{
 		X: width / 2,
 		Y: height / 4,
 	})
-
 	// 5
 	edge = append(edge, rl.Vector2{
 		X: 0,
 		Y: height / 2,
 	})
-
 	for i := range 3 {
 		g.Routes = append(g.Routes, &HexagoneSide{
 			StartingPoint: rl.Vector2Add(tile.Center, edge[i]),

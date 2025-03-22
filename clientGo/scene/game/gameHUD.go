@@ -5,9 +5,11 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+const ten float32 = 30
+
 type HUD struct {
-	SwitchPlayer SwitchPlayer
-	ResetGame    ResetGame
+	SwitchPlayer *SwitchPlayer
+	ResetGame    *ResetGame
 }
 
 type SwitchPlayer struct {
@@ -15,7 +17,7 @@ type SwitchPlayer struct {
 }
 
 type ResetGame struct {
-	button *RectangleButton
+	Button *RectangleButton
 }
 
 type RectangleButton struct {
@@ -25,18 +27,30 @@ type RectangleButton struct {
 
 func NewHUD(playerAmount int) *HUD {
 	return &HUD{
-		SwitchPlayer: *newSwitchPlayerHUD(playerAmount),
+		SwitchPlayer: newSwitchPlayerHUD(playerAmount),
+		ResetGame:    newResetGameHUD(),
 	}
 }
 
 func (h *HUD) Draw(players []*player.Player) {
 	h.SwitchPlayer.Draw(players)
+	h.ResetGame.Draw()
 }
 
 func newSwitchPlayerHUD(playerAmount int) *SwitchPlayer {
 	return &SwitchPlayer{
 		Buttons: newSwitchPlayerButton(playerAmount),
 	}
+}
+
+func newResetGameHUD() *ResetGame {
+	return &ResetGame{
+		Button: newButton(ten+ten*2*float32(2), ten, float32(ten), float32(ten), rl.Pink),
+	}
+}
+
+func (rg *ResetGame) Draw() {
+	rg.Button.Draw()
 }
 
 func (sh *SwitchPlayer) Draw(players []*player.Player) {
@@ -50,7 +64,6 @@ func newSwitchPlayerButton(playerAmount int) []*RectangleButton {
 	col = append(col, rl.Green)
 	col = append(col, rl.Red)
 
-	ten := float32(30)
 	var buttons []*RectangleButton
 	for i := range playerAmount {
 		buttons = append(
