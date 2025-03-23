@@ -34,6 +34,11 @@ func (g *GameScene) HandlerInput() {
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		g.ActivePlayer = g.Players[1]
 	}
+
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.ResetGame.Button.rec) &&
+		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		g.ResetGame()
+	}
 }
 
 func (g *GameScene) Draw() {
@@ -48,4 +53,10 @@ func (g *GameScene) GetGridCenter() rl.Vector2 {
 
 func (g *GameScene) DrawHUD() {
 	g.HUD.Draw(g.Players)
+}
+
+func (g *GameScene) ResetGame() {
+	g.ActivePlayer = g.Players[0]
+	g.grid.ResetGrid()
+	g.grid.PopulateGrid()
 }

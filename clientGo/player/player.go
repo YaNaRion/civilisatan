@@ -11,21 +11,21 @@ const (
 )
 
 type Player struct {
-	ColorTeam      rl.Color
+	ColorTeam      *rl.Color
 	Action         PlayerAction
 	IsActivePlayer bool
 }
 
 func NewPlayers(playerCount int) []*Player {
-	var colors []rl.Color
-	colors = append(colors, rl.Green)
-	colors = append(colors, rl.Red)
+	var colors []*rl.Color
+	colors = append(colors, &rl.Green)
+	colors = append(colors, &rl.Red)
 
 	var players []*Player
 	for i := range playerCount {
 		players = append(players, &Player{
 			ColorTeam:      colors[i],
-			Action:         PlaceRoute,
+			Action:         PlaceVillage,
 			IsActivePlayer: false,
 		})
 

@@ -6,6 +6,20 @@ import (
 	"math"
 )
 
+type Corner int
+
+const (
+	PlaceVillage Corner = iota
+	UpgradeTownCenter
+)
+
+type HexagoneCorner struct {
+	Type     Corner
+	Center   rl.Vector2
+	IsRender bool
+	color    *rl.Color
+}
+
 type HexagoneSide struct {
 	StartingPoint rl.Vector2
 	EndingPoint   rl.Vector2
@@ -25,6 +39,7 @@ type HexaGrid struct {
 	Center     rl.Vector2
 	Grid       [][]*HexagoneTile
 	Routes     []*HexagoneSide
+	Corner     []*HexagoneCorner
 	RowsLen    int
 	ColomnsLen int
 	sides      int32
@@ -54,6 +69,12 @@ func setupGrid() *HexaGrid {
 	grid.PopulateGrid()
 	grid.Center = grid.Grid[2][2].Center
 	return &grid
+}
+
+func (g *HexaGrid) ResetGrid() {
+	g.Grid = make([][]*HexagoneTile, 5)
+	g.Routes = nil
+	g.Corner = nil
 }
 
 func (g *HexaGrid) PopulateGrid() {
@@ -101,7 +122,22 @@ func (g *HexaGrid) addNeighbor() {
 	}
 }
 
-func (g *HexaGrid) DrawRoute(activePlayerCol rl.Color) {
+func (g *HexaGrid) DrawCorner(activePlayerCol *rl.Color) {
+	for _, corner := range g.Corner {
+		if rl.CheckCollisionPointCircle(rl.GetMousePosition(), corner.Center, 10) &&
+			rl.IsMouseButtonPressed(rl.MouseButtonLeft) &&
+			corner.color == nil {
+			corner.color = activePlayerCol
+			corner.IsRender = !corner.IsRender
+		}
+
+		if corner.IsRender {
+			rl.DrawCircle(int32(corner.Center.X), int32(corner.Center.Y), 5, *corner.color)
+		}
+	}
+}
+
+func (g *HexaGrid) DrawRoute(activePlayerCol *rl.Color) {
 	for _, side := range g.Routes {
 		thinkness := float32(5)
 		if rl.CheckCollisionPointLine(
@@ -111,7 +147,7 @@ func (g *HexaGrid) DrawRoute(activePlayerCol rl.Color) {
 			int32(thinkness-2),
 		) && rl.IsMouseButtonPressed(rl.MouseButtonRight) && side.color == nil {
 			side.IsRender = !side.IsRender
-			side.color = &activePlayerCol
+			side.color = activePlayerCol
 		}
 
 		if side.IsRender {
@@ -125,7 +161,7 @@ func (g *HexaGrid) DrawRoute(activePlayerCol rl.Color) {
 	}
 }
 
-func (g *HexaGrid) DrawGrid(activePlayerCol rl.Color) {
+func (g *HexaGrid) DrawGrid(activePlayerCol *rl.Color) {
 	for _, row := range g.Grid {
 		for _, tile := range row {
 			if tile == nil {
@@ -135,151 +171,5 @@ func (g *HexaGrid) DrawGrid(activePlayerCol rl.Color) {
 		}
 	}
 	g.DrawRoute(activePlayerCol)
-}
-
-func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile, i int, j int) {
-	var edge []rl.Vector2
-	// 0
-	edge = append(edge, rl.Vector2{
-		X: -width / 2,
-		Y: height / 4,
-	})
-	// 1
-	edge = append(edge, rl.Vector2{
-		X: -width / 2,
-		Y: -height / 4,
-	})
-	// 2
-	edge = append(edge, rl.Vector2{
-		X: 0,
-		Y: -height / 2,
-	})
-	// 3
-	edge = append(edge, rl.Vector2{
-		X: width / 2,
-		Y: -height / 4,
-	})
-	// 4
-	edge = append(edge, rl.Vector2{
-		X: width / 2,
-		Y: height / 4,
-	})
-	// 5
-	edge = append(edge, rl.Vector2{
-		X: 0,
-		Y: height / 2,
-	})
-	for i := range 3 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[i]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[i+1]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 3 && j == 0 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[3]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[4]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 4 && j == 1 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[3]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[4]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 4 && j == 2 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[3]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[4]),
-			IsRender:      false,
-		})
-
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[4]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[5]),
-			IsRender:      false,
-		})
-
-	}
-
-	if i == 4 && j == 3 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[3]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[4]),
-			IsRender:      false,
-		})
-
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[4]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[5]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 3 && j == 4 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[3]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[4]),
-			IsRender:      false,
-		})
-
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[4]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[5]),
-			IsRender:      false,
-		})
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[5]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[0]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 2 && j == 4 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[4]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[5]),
-			IsRender:      false,
-		})
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[5]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[0]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 1 && j == 4 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[4]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[5]),
-			IsRender:      false,
-		})
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[5]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[0]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 0 && j == 2 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[5]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[0]),
-			IsRender:      false,
-		})
-	}
-
-	if i == 1 && j == 3 {
-		g.Routes = append(g.Routes, &HexagoneSide{
-			StartingPoint: rl.Vector2Add(tile.Center, edge[5]),
-			EndingPoint:   rl.Vector2Add(tile.Center, edge[0]),
-			IsRender:      false,
-		})
-	}
+	g.DrawCorner(activePlayerCol)
 }
