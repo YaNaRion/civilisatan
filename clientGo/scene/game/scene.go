@@ -3,6 +3,7 @@ package game
 import (
 	// gui "github.com/gen2brain/raylib-go/raygui"
 	"client/player"
+	"client/scene/game/hud"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -11,31 +12,34 @@ type GameScene struct {
 	grid         *HexaGrid
 	Players      []*player.Player
 	ActivePlayer *player.Player
-	HUD          *HUD
+	HUD          *hud.HUD
 }
 
 func NewGameScene() *GameScene {
 	game := &GameScene{
 		grid:    setupGrid(),
 		Players: player.NewPlayers(2),
-		HUD:     NewHUD(2),
+		HUD:     hud.NewHUD(2),
 	}
 	game.ActivePlayer = game.Players[0]
 	return game
 }
 
 func (g *GameScene) HandlerInput() {
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.SwitchPlayer.Buttons[0].rec) &&
+	// Switch to player0
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.SwitchPlayer.Buttons[0].Rec) &&
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		g.ActivePlayer = g.Players[0]
 	}
 
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.SwitchPlayer.Buttons[1].rec) &&
+	// Switch to player1
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.SwitchPlayer.Buttons[1].Rec) &&
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		g.ActivePlayer = g.Players[1]
 	}
 
-	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.ResetGame.Button.rec) &&
+	// ResetGame
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.ResetGame.Button.Rec) &&
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		g.ResetGame()
 	}

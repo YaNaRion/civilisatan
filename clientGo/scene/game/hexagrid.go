@@ -26,6 +26,7 @@ type HexagoneSide struct {
 	color         *rl.Color
 	IsRender      bool
 	Neighbor      []*HexagoneSide
+	Corner        []*HexagoneCorner
 }
 
 type HexagoneTile struct {

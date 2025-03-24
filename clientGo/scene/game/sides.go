@@ -42,6 +42,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 			EndingPoint:   endingPoint,
 			IsRender:      false,
 		})
+
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
