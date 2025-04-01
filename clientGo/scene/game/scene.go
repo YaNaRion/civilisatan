@@ -3,7 +3,6 @@ package game
 import (
 	"client/player"
 	"client/scene/game/hud"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -43,14 +42,28 @@ func (g *GameScene) HandlerInput() {
 		g.ResetGame()
 	}
 
+	// Town button
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.Action.ActionButton[0].Rec) &&
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		g.ActivePlayer.Action = player.UpgradeTownCenter
+	}
+
+	// Village button
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.Action.ActionButton[1].Rec) &&
+		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		g.ActivePlayer.Action = player.PlaceVillage
+	}
+
+	// Route button
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.Action.ActionButton[2].Rec) &&
+		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		g.ActivePlayer.Action = player.PlaceRoute
 	}
 }
 
 func (g *GameScene) Draw() {
 	rl.ClearBackground(rl.Black)
-	g.grid.DrawGrid(g.ActivePlayer.ColorTeam)
+	g.grid.DrawGrid(g.ActivePlayer)
 	g.DrawHUD()
 }
 

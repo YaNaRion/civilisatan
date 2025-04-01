@@ -46,6 +46,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -59,6 +60,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -72,6 +74,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -85,6 +88,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 
 		endingPoint = rl.Vector2Add(tile.Center, edge[5])
@@ -96,6 +100,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -110,6 +115,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 
 		endingPoint = rl.Vector2Add(tile.Center, edge[5])
@@ -121,6 +127,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -134,6 +141,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 
 		endingPoint = rl.Vector2Add(tile.Center, edge[5])
@@ -145,6 +153,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 
 		endingPoint = rl.Vector2Add(tile.Center, edge[0])
@@ -156,6 +165,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -169,6 +179,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 
 		endingPoint = rl.Vector2Add(tile.Center, edge[0])
@@ -180,6 +191,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -193,6 +205,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 
 		endingPoint = rl.Vector2Add(tile.Center, edge[0])
@@ -204,6 +217,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -218,6 +232,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 
@@ -231,6 +246,7 @@ func (g *HexaGrid) CreateSides(width float32, height float32, tile *HexagoneTile
 		g.Corner = append(g.Corner, &HexagoneCorner{
 			Center:   endingPoint,
 			IsRender: false,
+			Type:     Empty,
 		})
 	}
 }

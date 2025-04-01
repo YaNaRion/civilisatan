@@ -25,7 +25,7 @@ func NewPlayers(playerCount int) []*Player {
 	for i := range playerCount {
 		players = append(players, &Player{
 			ColorTeam:      colors[i],
-			Action:         PlaceVillage,
+			Action:         PlaceRoute,
 			IsActivePlayer: false,
 		})
 

@@ -1,16 +1,19 @@
 package game
 
 import (
+	"client/player"
 	"client/window"
-	rl "github.com/gen2brain/raylib-go/raylib"
 	"math"
+
+	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Corner int
 
 const (
-	PlaceVillage Corner = iota
-	UpgradeTownCenter
+	Empty Corner = iota
+	Village
+	TownCenter
 )
 
 type HexagoneCorner struct {
@@ -18,6 +21,7 @@ type HexagoneCorner struct {
 	Center   rl.Vector2
 	IsRender bool
 	color    *rl.Color
+	Route    []*HexagoneSide
 }
 
 type HexagoneSide struct {
@@ -113,56 +117,105 @@ func (g *HexaGrid) PopulateGrid() {
 func (g *HexaGrid) addNeighbor() {
 	for _, route := range g.Routes {
 		for _, neighbor := range g.Routes {
-			if rl.Vector2Equals(route.StartingPoint, neighbor.StartingPoint) ||
-				rl.Vector2Equals(route.StartingPoint, neighbor.EndingPoint) ||
-				rl.Vector2Equals(route.EndingPoint, neighbor.StartingPoint) ||
-				rl.Vector2Equals(route.EndingPoint, neighbor.EndingPoint) {
+			if rl.Vector2Equals(route.StartingPoint, neighbor.EndingPoint) ||
+				rl.Vector2Equals(route.EndingPoint, neighbor.StartingPoint) {
 				route.Neighbor = append(route.Neighbor, neighbor)
+			}
+		}
+	}
+
+	for _, corner := range g.Corner {
+		for _, route := range g.Routes {
+			if rl.Vector2Equals(corner.Center, route.StartingPoint) ||
+				rl.Vector2Equals(corner.Center, route.EndingPoint) {
+				corner.Route = append(corner.Route, route)
+				route.Corner = append(route.Corner, corner)
 			}
 		}
 	}
 }
 
-func (g *HexaGrid) DrawCorner(activePlayerCol *rl.Color) {
+func (g *HexaGrid) DrawCorner(activePlayer *player.Player) {
 	for _, corner := range g.Corner {
 		if rl.CheckCollisionPointCircle(rl.GetMousePosition(), corner.Center, 10) &&
-			rl.IsMouseButtonPressed(rl.MouseButtonLeft) &&
-			corner.color == nil {
-			corner.color = activePlayerCol
-			corner.IsRender = !corner.IsRender
+			rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+
+			if activePlayer.Action == player.PlaceVillage && !corner.IsRender &&
+				g.isVillagePositionValid(corner, activePlayer) {
+				corner.Type = Village
+				corner.color = activePlayer.ColorTeam
+				corner.IsRender = !corner.IsRender
+			}
+
+			if activePlayer.Action == player.UpgradeTownCenter &&
+				activePlayer.ColorTeam == corner.color {
+				corner.Type = TownCenter
+			}
 		}
 
 		if corner.IsRender {
-			rl.DrawCircle(int32(corner.Center.X), int32(corner.Center.Y), 5, *corner.color)
+			if corner.Type == Village {
+				rl.DrawCircle(int32(corner.Center.X), int32(corner.Center.Y), 5, *corner.color)
+			}
+
+			if corner.Type == TownCenter {
+				rl.DrawCircle(int32(corner.Center.X), int32(corner.Center.Y), 8, *corner.color)
+			}
 		}
 	}
 }
 
-func (g *HexaGrid) DrawRoute(activePlayerCol *rl.Color, action *) {
-	for _, side := range g.Routes {
-		thinkness := float32(5)
-		if rl.CheckCollisionPointLine(
-			rl.GetMousePosition(),
-			side.StartingPoint,
-			side.EndingPoint,
-			int32(thinkness-2),
-		) && rl.IsMouseButtonPressed(rl.MouseButtonRight) && side.color == nil {
-			side.IsRender = !side.IsRender
-			side.color = activePlayerCol
+func (g *HexaGrid) isVillagePositionValid(
+	corner *HexagoneCorner,
+	activePlayer *player.Player,
+) bool {
+	isValide := true
+	for _, route := range corner.Route {
+		for _, corner := range route.Corner {
+			isValide = corner.Type == Empty
+			if !isValide {
+				return isValide
+			}
 		}
+	}
 
-		if side.IsRender {
-			rl.DrawLineEx(
+	isValide = false
+	for _, route := range corner.Route {
+		if route.color == activePlayer.ColorTeam {
+			isValide = true
+		}
+	}
+
+	return isValide
+}
+
+func (g *HexaGrid) DrawRoute(activePlayer *player.Player) {
+	if activePlayer != nil {
+		for _, side := range g.Routes {
+			thinkness := float32(5)
+			if rl.CheckCollisionPointLine(
+				rl.GetMousePosition(),
 				side.StartingPoint,
 				side.EndingPoint,
-				float32(thinkness),
-				*side.color,
-			)
+				int32(thinkness-2),
+			) && rl.IsMouseButtonPressed(rl.MouseButtonRight) && side.color == nil && activePlayer.Action == player.PlaceRoute {
+				side.IsRender = !side.IsRender
+				side.color = activePlayer.ColorTeam
+			}
+
+			if side.IsRender {
+				rl.DrawLineEx(
+					side.StartingPoint,
+					side.EndingPoint,
+					float32(thinkness),
+					*side.color,
+				)
+			}
 		}
 	}
 }
 
-func (g *HexaGrid) DrawGrid(activePlayerCol *rl.Color) {
+func (g *HexaGrid) DrawGrid(activePlayer *player.Player) {
 	for _, row := range g.Grid {
 		for _, tile := range row {
 			if tile == nil {
@@ -171,6 +224,6 @@ func (g *HexaGrid) DrawGrid(activePlayerCol *rl.Color) {
 			rl.DrawPoly(tile.Center, g.sides, g.radius-2, 30.0, rl.DarkBlue)
 		}
 	}
-	g.DrawRoute(activePlayerCol)
-	g.DrawCorner(activePlayerCol)
+	g.DrawRoute(activePlayer)
+	g.DrawCorner(activePlayer)
 }

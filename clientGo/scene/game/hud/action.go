@@ -28,9 +28,8 @@ func newActionHUD() *Action {
 				option[i],
 			),
 		)
-		if 
 	}
 	return &Action{
-		actionButton: buttons,
+		ActionButton: buttons,
 	}
 }
