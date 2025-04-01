@@ -3,11 +3,11 @@ package hud
 import "client/window"
 
 type Action struct {
-	actionButton []*RectangleButton
+	ActionButton []*RectangleButton
 }
 
 func (ac *Action) Draw() {
-	for _, a := range ac.actionButton {
+	for _, a := range ac.ActionButton {
 		a.Draw()
 	}
 }
@@ -16,6 +16,7 @@ func newActionHUD() *Action {
 	option := []string{"Town", "Village", "Route"}
 	var buttons []*RectangleButton
 	for i := range 3 {
+
 		buttons = append(
 			buttons,
 			newButton(
@@ -27,6 +28,7 @@ func newActionHUD() *Action {
 				option[i],
 			),
 		)
+		if 
 	}
 	return &Action{
 		actionButton: buttons,

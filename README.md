@@ -1,14 +1,11 @@
-# civilisatan
+# Civilisatan
 Game mix between Catan and Civilisation
 
-
 Front-end:
-    - Native HTML/CSS
-    - Ts for classe and type security
+    - GO because why not
 
 Back-end:
     - GO because it's sick
-    - Rest-API
 
 DB:
-    - Mongo because simple
+    - We will see

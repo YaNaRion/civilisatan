@@ -42,6 +42,10 @@ func (g *GameScene) HandlerInput() {
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		g.ResetGame()
 	}
+
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.Action.ActionButton[0].Rec) &&
+		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+	}
 }
 
 func (g *GameScene) Draw() {

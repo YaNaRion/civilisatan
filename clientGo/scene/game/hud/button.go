@@ -13,13 +13,6 @@ type RectangleButton struct {
 
 func (b *RectangleButton) Draw() {
 	gui.Button(*b.Rec, b.message)
-	// rl.DrawRectangle(
-	// 	b.Rec.ToInt32().X,
-	// 	b.Rec.ToInt32().Y,
-	// 	b.Rec.ToInt32().Width,
-	// 	b.Rec.ToInt32().Height,
-	// 	b.color,
-	// )
 }
 
 func newButton(

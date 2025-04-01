@@ -138,7 +138,7 @@ func (g *HexaGrid) DrawCorner(activePlayerCol *rl.Color) {
 	}
 }
 
-func (g *HexaGrid) DrawRoute(activePlayerCol *rl.Color) {
+func (g *HexaGrid) DrawRoute(activePlayerCol *rl.Color, action *) {
 	for _, side := range g.Routes {
 		thinkness := float32(5)
 		if rl.CheckCollisionPointLine(
