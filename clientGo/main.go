@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "client/camera"
 	"client/scene"
 	"client/window"
 	rl "github.com/gen2brain/raylib-go/raylib"
@@ -24,8 +23,8 @@ func main() {
 
 		// Active la caméra 3D
 		// rl.BeginMode2D(*camera.Cam)
-		sceneManager.DrawScene()
 
+		sceneManager.DrawScene()
 		sceneManager.HandlerInput()
 
 		// Gère le zoom de la caméra

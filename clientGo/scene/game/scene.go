@@ -1,7 +1,6 @@
 package game
 
 import (
-	// gui "github.com/gen2brain/raylib-go/raygui"
 	"client/player"
 	"client/scene/game/hud"
 
