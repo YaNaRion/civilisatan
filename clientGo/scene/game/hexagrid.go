@@ -3,9 +3,8 @@ package game
 import (
 	"client/player"
 	"client/window"
-	"math"
-
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"math"
 )
 
 type Corner int
@@ -112,6 +111,14 @@ func (g *HexaGrid) PopulateGrid() {
 	}
 	g.Grid[0][0] = nil
 	g.addNeighbor()
+	g.addDefaultRoute()
+}
+
+func (g *HexaGrid) addDefaultRoute() {
+	g.Routes[0].color = &rl.Green
+	g.Routes[0].IsRender = true
+	g.Routes[1].color = &rl.Red
+	g.Routes[1].IsRender = true
 }
 
 func (g *HexaGrid) addNeighbor() {
@@ -133,6 +140,110 @@ func (g *HexaGrid) addNeighbor() {
 			}
 		}
 	}
+}
+
+func (g *HexaGrid) isRoutePositionValid(route *HexagoneSide, active *player.Player) bool {
+	for _, route := range route.Neighbor {
+		if route.color == active.ColorTeam {
+			return true
+		}
+	}
+	return false
+}
+
+func (g *HexaGrid) isVillagePositionValid(
+	corner *HexagoneCorner,
+	activePlayer *player.Player,
+) bool {
+	var isValide bool
+	for _, route := range corner.Route {
+		for _, corner := range route.Corner {
+			isValide = corner.Type == Empty
+			if !isValide {
+				return isValide
+			}
+		}
+	}
+
+	isValide = false
+	for _, route := range corner.Route {
+		if route.color == activePlayer.ColorTeam {
+			isValide = true
+		}
+	}
+
+	return isValide
+}
+
+func (g *HexaGrid) DrawRoute(activePlayer *player.Player) {
+	if activePlayer != nil {
+		for _, side := range g.Routes {
+			thinkness := float32(5)
+			if rl.CheckCollisionPointLine(
+				rl.GetMousePosition(),
+				side.StartingPoint,
+				side.EndingPoint,
+				int32(thinkness-2),
+			) && rl.IsMouseButtonPressed(rl.MouseButtonLeft) && side.color == nil &&
+				activePlayer.Action == player.PlaceRoute && g.isRoutePositionValid(side, activePlayer) {
+				side.IsRender = !side.IsRender
+				side.color = activePlayer.ColorTeam
+			}
+
+			if side.IsRender {
+				rl.DrawLineEx(
+					side.StartingPoint,
+					side.EndingPoint,
+					float32(thinkness),
+					*side.color,
+				)
+			}
+		}
+	}
+}
+
+func (g *HexaGrid) DrawGrid(activePlayer *player.Player) {
+	numberOnTile := []string{
+		"6",
+		"5",
+		"9",
+		"4",
+		"3",
+		"8",
+		"10",
+		"6",
+		"5",
+		"7",
+		"9",
+		"12",
+		"3",
+		"2",
+		"10",
+		"11",
+		"11",
+		"4",
+		"8",
+	}
+	number := 0
+	for _, row := range g.Grid {
+		for _, tile := range row {
+			if tile == nil {
+				continue
+			}
+			rl.DrawPoly(tile.Center, g.sides, g.radius-2, 30.0, rl.DarkBlue)
+			rl.DrawText(
+				numberOnTile[number],
+				int32(tile.Center.X),
+				int32(tile.Center.Y),
+				16,
+				rl.Black,
+			)
+			number++
+		}
+	}
+
+	g.DrawRoute(activePlayer)
+	g.DrawCorner(activePlayer)
 }
 
 func (g *HexaGrid) DrawCorner(activePlayer *player.Player) {
@@ -163,67 +274,4 @@ func (g *HexaGrid) DrawCorner(activePlayer *player.Player) {
 			}
 		}
 	}
-}
-
-func (g *HexaGrid) isVillagePositionValid(
-	corner *HexagoneCorner,
-	activePlayer *player.Player,
-) bool {
-	isValide := true
-	for _, route := range corner.Route {
-		for _, corner := range route.Corner {
-			isValide = corner.Type == Empty
-			if !isValide {
-				return isValide
-			}
-		}
-	}
-
-	isValide = false
-	for _, route := range corner.Route {
-		if route.color == activePlayer.ColorTeam {
-			isValide = true
-		}
-	}
-
-	return isValide
-}
-
-func (g *HexaGrid) DrawRoute(activePlayer *player.Player) {
-	if activePlayer != nil {
-		for _, side := range g.Routes {
-			thinkness := float32(5)
-			if rl.CheckCollisionPointLine(
-				rl.GetMousePosition(),
-				side.StartingPoint,
-				side.EndingPoint,
-				int32(thinkness-2),
-			) && rl.IsMouseButtonPressed(rl.MouseButtonRight) && side.color == nil && activePlayer.Action == player.PlaceRoute {
-				side.IsRender = !side.IsRender
-				side.color = activePlayer.ColorTeam
-			}
-
-			if side.IsRender {
-				rl.DrawLineEx(
-					side.StartingPoint,
-					side.EndingPoint,
-					float32(thinkness),
-					*side.color,
-				)
-			}
-		}
-	}
-}
-
-func (g *HexaGrid) DrawGrid(activePlayer *player.Player) {
-	for _, row := range g.Grid {
-		for _, tile := range row {
-			if tile == nil {
-				continue
-			}
-			rl.DrawPoly(tile.Center, g.sides, g.radius-2, 30.0, rl.DarkBlue)
-		}
-	}
-	g.DrawRoute(activePlayer)
-	g.DrawCorner(activePlayer)
 }

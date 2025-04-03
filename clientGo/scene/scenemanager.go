@@ -30,6 +30,7 @@ func (s *SceneManager) drawGame() {
 	if rl.IsKeyPressed(rl.KeyEnter) {
 		s.sceneState = MENU
 	}
+
 	s.gameScene.Draw()
 }
 
