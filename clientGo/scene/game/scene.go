@@ -7,17 +7,19 @@ import (
 )
 
 type GameScene struct {
-	grid         *HexaGrid
-	Players      []*player.Player
-	ActivePlayer *player.Player
-	HUD          *hud.HUD
+	grid             *HexaGrid
+	Players          []*player.Player
+	ActivePlayer     *player.Player
+	CurrentDicevalue int
+	HUD              *hud.HUD
 }
 
 func NewGameScene() *GameScene {
+	gameState := "DEBUT DE LA GAME"
 	game := &GameScene{
 		grid:    setupGrid(),
 		Players: player.NewPlayers(2),
-		HUD:     hud.NewHUD(2),
+		HUD:     hud.NewHUD(2, &gameState),
 	}
 	game.ActivePlayer = game.Players[0]
 	return game
@@ -58,6 +60,12 @@ func (g *GameScene) HandlerInput() {
 	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.Action.ActionButton[2].Rec) &&
 		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		g.ActivePlayer.Action = player.PlaceRoute
+	}
+
+	// Dice button
+	if rl.CheckCollisionPointRec(rl.GetMousePosition(), *g.HUD.Dice.Button.Rec) &&
+		rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		g.CurrentDicevalue = g.HUD.Dice.RolDice()
 	}
 }
 

@@ -14,14 +14,17 @@ const (
 	httpPort = ":3000"
 )
 
+// Write a fonction that print a chrisma tree
+
 func Setup() *config.Server {
 	// log.Println("Setup DB connection")
 	var err error
+
 	var db *infra.DB
-	// for db == nil {
-	// 	db, _ = infra.Setup()
-	// 	time.Sleep(1 * time.Second)
-	// }
+	for db == nil {
+		db, _ = infra.Setup()
+		time.Sleep(1 * time.Second)
+	}
 
 	// Setup des routes de l'API
 	log.Println("Setup Http controller")

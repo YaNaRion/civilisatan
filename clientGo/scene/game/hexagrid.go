@@ -125,7 +125,9 @@ func (g *HexaGrid) addNeighbor() {
 	for _, route := range g.Routes {
 		for _, neighbor := range g.Routes {
 			if rl.Vector2Equals(route.StartingPoint, neighbor.EndingPoint) ||
-				rl.Vector2Equals(route.EndingPoint, neighbor.StartingPoint) {
+				rl.Vector2Equals(route.EndingPoint, neighbor.StartingPoint) ||
+				rl.Vector2Equals(route.EndingPoint, neighbor.EndingPoint) ||
+				rl.Vector2Equals(route.StartingPoint, neighbor.StartingPoint) {
 				route.Neighbor = append(route.Neighbor, neighbor)
 			}
 		}
@@ -212,8 +214,8 @@ func (g *HexaGrid) DrawGrid(activePlayer *player.Player) {
 		"8",
 		"10",
 		"6",
-		"5",
 		"7",
+		"5",
 		"9",
 		"12",
 		"3",
